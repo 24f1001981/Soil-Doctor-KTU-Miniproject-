@@ -2,11 +2,11 @@
 """
 Created on Sun Feb  8 19:23:40 2026
 
-@author: Sreya
+@author: Shreya
 """
 
-import pandas as pd  #Pandas is used for dataset creation and preprocessing as soil samples are easier to handle as tables 
-from sklearn.tree import DecisionTreeClassifier, export_text   #Scikit-learn is used to implement and interpret the decision tree model 
+import pandas as pd  
+from sklearn.tree import DecisionTreeClassifier, export_text  
 import matplotlib.pyplot as plt
 from sklearn.tree import plot_tree
 from sklearn.metrics import confusion_matrix, classification_report
@@ -14,8 +14,9 @@ import seaborn as sns
 
 
 # -------------------------------------------------
-# STEP 1: Dataset (Derived from Agronomic Ranges)
+# Dataset (Derived from Agronomic Ranges)
 # -------------------------------------------------
+
 data = {
     "Nitrogen": [
         115, 120, 125,      # Red Amaranthus
@@ -78,25 +79,25 @@ data = {
 df = pd.DataFrame(data)
 
 # -------------------------------------------------
-# STEP 2: Feature Selection
+#  Feature Selection
 # -------------------------------------------------
 X = df[["Nitrogen", "Phosphorus", "Potassium", "pH", "Temperature", "EC","Soil Moisture"]]
 y = df["Crop"]
 
 # -------------------------------------------------
-# STEP 3: Train Decision Tree 
+# Train Decision Tree 
 # -------------------------------------------------
 model = DecisionTreeClassifier(
     criterion="gini",
-    max_depth=4,              # readable rules
-    min_samples_leaf=2,       # avoid overfitting
-    random_state=42           # reproducible
+    max_depth=4,             
+    min_samples_leaf=2,       
+    random_state=42          
 )
 
 model.fit(X, y)
 
 # -------------------------------------------------
-# STEP 4: Extract Decision Tree Rules
+#  Extract Decision Tree Rules
 # -------------------------------------------------
 tree_rules = export_text(
     model,
@@ -107,7 +108,7 @@ print("DECISION TREE RULES:\n")
 print(tree_rules)
 
 # -------------------------------------------------
-# STEP 5: Test with Sample Input
+#  Test with Sample Input
 # -------------------------------------------------
 test_sample = pd.DataFrame([{
     "Nitrogen": 100,
@@ -137,17 +138,17 @@ plt.title("Decision Tree for Crop Recommendation", fontsize=16)
 plt.show()
 
 # -------------------------------------------------
-# STEP 6: Confusion Matrix & Heatmap
+#  Confusion Matrix & Heatmap
 # -------------------------------------------------
 
 
-# Generate predictions on the training data
+
 y_pred = model.predict(X)
 
-# Confusion matrix
+
 cm = confusion_matrix(y, y_pred, labels=model.classes_)
 
-# Plot heatmap
+
 plt.figure(figsize=(8, 6))
 sns.heatmap(
     cm,
@@ -167,7 +168,7 @@ plt.yticks(rotation=0)
 plt.tight_layout()
 plt.show()
 
-# Classification report (precision, recall, F1)
+
 print("\nCLASSIFICATION REPORT:\n")
 print(classification_report(y, y_pred, target_names=model.classes_))
 plt.figure(figsize=(8, 6))
